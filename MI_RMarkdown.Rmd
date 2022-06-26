@@ -1,0 +1,279 @@
+---
+title: "MI RMarkdown"
+author: "Kenza Slaoui"
+date: '2022-06-15'
+output: 
+   html_document:
+        toc : yes
+        toc_depth: 2
+---
+
+```{r, include = FALSE}
+source("MI_Analysis.R", local = knitr::knit_global())
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+
+# Executive Summary
+
+In an attempt to examine the presence of any group differences between Peruvian nationals and Venezuelan refugees with regards to Social Emotional Learning, we conduct measurement invariance on a range of different SEL measures for a sample of 823 Grade 3 students and 744 Grade 7 students and their caregivers. Using Confirmatory Factor Analysis, we conduct measurement invariance to ensure that any differences observed are a reflection of true differences between groups and are not a result of biased measurements, which would produce unreliable results. A measurement is invariant if the items measure the factor consistently across groups.
+
+To confirm that a measurement is invariant we verify both threshold and loading invariances. We first test our measurement model separately on each of the groups ‘Peruvian’ and ‘Venezuelan’ to ensure that the model fits our data. We rely on the following indices to determine adequate fit (p>0.05, CFI>0.90, RMSEA<0.10, SRMR<0.08). If model fit is confirmed, then we proceed to test for invariance. To do so, we conduct a multi-group CFA firstly without any constraints to produce the configural model, then we impose an equality constraint on the thresholds in the two groups to generate the threshold model, then we constrain both thresholds and factor loadings to be equal across groups to obtain the loading model. Threshold invariance is established if the threshold model fits the data and the differences in fit indices between the configural and threshold models are non-significant. Similarly, loading invariance is satisfied if the loading model fits the data and the differences in fit indices between the threshold and loading models are non-significant. A change in model fit between the configural and threshold models is considered to be significant
+if Δp < 0.05,  ΔCFI= 0.02 , ΔRMSEA= 0.03, or ΔSRMP= 0.03. When comparing the threshold and loading models, the change in fit is significant if Δp < 0.05,  ΔCFI= 0.01, ΔRMSEA= 0.01,  or ΔSRMP= 0.01.
+
+If both threshold and loading invariances are satisfied, we can safely compare the mean and variance of the two groups on the particular construct. If threshold or loading invariances cannot be confirmed, we proceed to investigate partial invariance and we provide a table identifying the restricted parameters with a significant modification index (>4). To achieve partial invariance, we should consider freeing those constrained parameters.
+
+Our findings suggest that for Grade 3, the only measure that was found to be invariant was Child Self Regulation. The Caregiver Relationship measure was found to be threshold non-invariant, while for the following measures - Child Self Regulated Learning, Child Internalizing-Caregiver Report, Child Emotional Processes, the fit of the measurement model did not fit either one or both groups. For the Caregiver Anxiety and Depression model the fit on the Venezuelan group was ambiguous. For Grade 7, all measures but one were found to be threshold non-invariant - Child Self Regulation, Child Self Regulated Learning, Child Internalizing-Child Report, Child Externalizing-Child Report, Caregiver Relationship and Caregiver Anxiety and Depression. The Child Emotional Processes model had an ambiguous fit on the Venezuelan group.
+
+(Refer to the MI_Analysis.R script to access a more extensive analysis on each of the measures than what is provided below)
+
+
+# Grade 3
+
+## Child Self Regulation (csr)
+
+### Model fit for each model and model comparison statistics
+
+```{r}
+flextable::flextable(g3.csr.fits) %>% knitr::knit_print()
+```
+
+### Conclusions
+
+Both Threshold and Loading invariances were satisfied, this measure is invariant for Venezuelan and Peruvian groups.
+
+### Standardized means and variances of groups
+
+```{r}
+flextable::flextable(g3.csr.mean.var.data) %>% knitr::knit_print()
+```
+
+
+## Child Self Regulated Learning (csrl)
+
+### Model fit for each model and model comparison statistics
+
+```{r}
+flextable::flextable(g3.csrl.fits) %>% knitr::knit_print()
+```
+
+### Conclusions
+
+The csrl measure model fits poorly both the Peruvian and Venezuelan groups.
+
+
+## Child Internalizing - Caregiver Report (aint)
+
+### Model fit for each model and model comparison statistics
+
+```{r}
+flextable::flextable(g3.aint.fits) %>% knitr::knit_print()
+```
+
+### Conclusions
+
+The model for the aint factor has a poor fit on both the Peruvian and Venezuelan groups.
+
+
+## Child Emotional Processes - Caregiver Report (aemo)
+
+### Model fit for each model and model comparison statistics
+
+```{r}
+flextable::flextable(g3.aemo.fits) %>% knitr::knit_print()
+```
+
+### Conclusions
+
+The model for the aemo measure fits the Venezuelan group poorly. 
+
+
+## Caregiver Relationship - Caregiver Report (arel)
+
+### Model fit for each model and model comparison statistics
+
+```{r}
+flextable::flextable(g3.arel.fits) %>% knitr::knit_print()
+```
+
+### Conclusions
+
+Threshold invariance can not be established.
+
+### Investigating threshold partial invariance
+
+Consider freeing the equality constraint on the following thresholds to obtain Threshold Partial Invariance on the Grade 3 Caregiver Relationship Measure.
+
+```{r}
+flextable::flextable(g3.arel.thr.part.inv.data) %>% knitr::knit_print()
+```
+
+
+## Caregiver Anxiety and Depression (aanxdep)
+
+### Model fit for each model and model comparison statistics
+
+```{r}
+flextable::flextable(g3.aanxdep.fits) %>% knitr::knit_print()
+```
+
+### Conclusions
+
+The fit of the model on the Venezuelan group is ambiguous.
+
+However, if we choose to accept the fit of the model on the Venezuelan group, and proceed to determine and compare the goodness of fit of the Configural, Threshold and Loading models to test the measure's invariance, we conclude that the measure is threshold non-invariant.
+
+
+### Investigating threshold partial invariance
+
+Consider freeing the equality constraint on the following thresholds to obtain Threshold Partial Invariance on the Grade 3 Caregiver Anxiety and Depression Measure.
+
+```{r}
+flextable::flextable(g7.aanxdep.thr.part.inv.data) %>% knitr::knit_print()
+```
+
+
+\newpage
+
+
+# Grade 7
+
+## Child Self Regulation (csr)
+
+### Model fit for each model and model comparison statistics
+
+```{r}
+flextable::flextable(g7.csr.fits) %>% knitr::knit_print()
+```
+
+### Conclusions
+
+Threshold invariance is not satisfied.
+
+### Investigating threshold partial invariance
+
+Consider freeing the equality constraint on the following thresholds to obtain Threshold Partial Invariance on the Grade 7 Child Self Regulation Measure.
+
+```{r}
+flextable::flextable(g7.csr.thr.part.inv.data) %>% knitr::knit_print()
+```
+
+
+## Child Self Regulated Learning (csrl)
+
+### Model fit for each model and model comparison statistics
+
+```{r}
+flextable::flextable(g7.csrl.fits) %>% knitr::knit_print()
+```
+
+### Conclusions
+
+The fit of the threshold model is ambiguous. Therefore, we can not establish threshold invariance.
+
+### Investigating threshold partial invariance
+
+Consider freeing the equality constraint on the following thresholds to obtain Threshold Partial Invariance on the Grade 7 Child Self Regulated Learning Measure.
+
+```{r}
+flextable::flextable(g7.csrl.thr.part.inv.data) %>% knitr::knit_print()
+```
+
+
+## Child Internalizing - Child Report (cyips)
+
+### Model fit for each model and model comparison statistics
+
+```{r}
+flextable::flextable(g7.cyips.fits) %>% knitr::knit_print()
+```
+
+### Conclusions
+
+The measure is threshold non-invariant.
+
+### Investigating threshold partial invariance
+
+Consider freeing the equality constraint on the following thresholds to obtain Threshold Partial Invariance on the Grade 7 Child Internalizing - Child Report Measure.
+
+```{r}
+flextable::flextable(g7.cyips.thr.part.inv.data) %>% knitr::knit_print()
+```
+
+
+## Child Externalizing - Child Report (cyeps)
+
+### Model fit for each model and model comparison statistics
+
+```{r}
+flextable::flextable(g7.cyeps.fits) %>% knitr::knit_print()
+```
+
+### Conclusions
+
+Threshold invariance can not be established.
+
+### Investigating threshold partial invariance
+
+Consider freeing the equality constraint on the following thresholds to obtain Threshold Partial Invariance on the Grade 7 Child Externalizing - Child Report Measure.
+
+```{r}
+flextable::flextable(g7.cyeps.thr.part.inv.data) %>% knitr::knit_print()
+```
+
+
+## Child Emotional Processes - Caregiver Report (aemo)
+
+### Model fit for each model and model comparison statistics
+
+```{r}
+flextable::flextable(g7.aemo.fits) %>% knitr::knit_print()
+```
+
+### Conclusions
+
+The fit of the model on the Venezuelan group is ambiguous.
+
+
+## Caregiver Relationship - Caregiver Report (arel)
+
+### Model fit for each model and model comparison statistics
+
+```{r}
+flextable::flextable(g7.arel.fits) %>% knitr::knit_print()
+```
+
+### Conclusions
+
+Threshold invariance is not satisfied.
+
+### Investigating threshold partial invariance
+
+Consider freeing the equality constraint on the following thresholds to obtain Threshold Partial Invariance on the Grade 7 Caregiver Relationship - Caregiver Report Measure.
+
+```{r}
+flextable::flextable(g7.arel.thr.part.inv.data) %>% knitr::knit_print()
+```
+
+
+## Caregiver Anxiety and Depression (aanxdep)
+
+### Model fit for each model and model comparison statistics
+
+```{r}
+flextable::flextable(g7.aanxdep.fits) %>% knitr::knit_print()
+```
+
+### Conclusions
+
+The measure is threshold non-invariant.
+
+### Investigating threshold partial invariance
+
+Consider freeing the equality constraint on the following thresholds to obtain Threshold Partial Invariance on the Grade 7 Caregiver Anxiety and Depression Measure.
+
+```{r}
+flextable::flextable(g7.aanxdep.thr.part.inv.data) %>% knitr::knit_print()
+```
+
+

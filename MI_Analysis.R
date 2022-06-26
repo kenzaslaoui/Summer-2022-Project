@@ -1910,6 +1910,81 @@ print(g3.aanxdep.results)
 #The RMSEA is outside of its acceptable fit range 0.06<RMSEA<0.10
 #The fit of the model on the Venezuelan group is ambiguous
 
+#If we choose to accept the fit of the model on the Venezuelan group, 
+#we can proceed to run a multi-group CFA and compare the three models (Configural, Threshold and Loading)
+
+#Multi-Group CFA is performed 
+#First, with no constraints:
+#the chi square result is significant (p<0.05) - as expected
+#the model produces adequate fit as demonstrated by fit indices (CFI=0.99, RMSEA=0.09 and SRMR=0.04)
+#we conclude that the fit of the configural model is satisfactory
+#Second, we constrain the indicator thresholds to be equal across the two groups (to test weak invariance):
+#the chi square result is significant (p<0.05) - as expected
+#the fit indices belong to their respective acceptable fit ranges (CFI=0.97, RMSEA=0.08 and SRMR=0.04)
+#the threshold model produces an adequate fit
+#Third, we constrain both indicator thresholds and factor loadings to be equal across the two groups (to test strong invariance):
+#The chi square result is significant (p<0.05) - as expected
+#the fit indices belong to their respective acceptable fit ranges (CFI=0.97, RMSEA=0.07, SRMR=0.05)
+#the loading model shows a good fit
+
+
+## Configural vs Threshold vs Loading
+
+#To compare the 3 models, we consider a change in model fit to be significant
+#between configural and threshold models, if: Difference in CFI= 0.02 , Difference in RMSEA= 0.03, Difference in SRMP= 0.03
+#between threshold and loading models, if: Difference in CFI= 0.01, Difference in RMSEA= 0.01, Difference in SRMP= 0.01
+#Chen (2007) 
+#Rutkowski and Svetina (2014)
+
+#Configural vs Threshold
+
+#We notice a significant change in fit from the configural model to the threshold model 
+#We obtain non-significant changes in fit indices 
+#(difference in CFI of -0.004, a difference in RMSEA of -0.008, no change observed in the value of SRMR)
+#However, the chi square difference test was statistically significant (chi-square difference= 32.719, p= 0.003)
+#Therefore, we are unable to establish threshold invariance
+
+
+##We proceed to investigate partial invariance in the Threshold model
+lavTestScore(g3.aanxdep.mods$Threshold, cumulative = TRUE)$uni
+
+#We would like to know which thresholds to free from the equality constraint to obtain partial invariance
+#the lavTestScore identifies the Modification Index for each of our restricted parameters 
+#(in this case, our restricted parameters are the indicator thresholds that are constrained to be equal in the two groups)
+#The Modification Index describes the decrease in chi square that would be achieved provided that we free the parameter restricted
+#We identify the thresholds with significant Modification indices (MI > 4)  
+
+#Number of parameters with MI > 4
+g3.aanxdep.part.inv.n <- 0
+for (value in lavTestScore(g3.aanxdep.mods$Threshold, cumulative = TRUE)$uni$X2){
+  if (value > 4){
+    g3.aanxdep.part.inv.n <- g3.aanxdep.part.inv.n + 1 }}
+print(g3.aanxdep.part.inv.n)
+
+#List of parameters with MI > 4
+g3.aanxdep.part.inv.int <- arrange(lavTestScore(g3.aanxdep.mods$Threshold, cumulative = TRUE)$uni, desc(X2)) %>%
+  filter(X2 > 4) %>%
+  select(lhs, X2) %>%
+  rename(plabel = lhs)
+
+g3.aanxdep.thr.part.inv.data <- data.frame(plabel = g3.aanxdep.part.inv.int$plabel, lhs = vector('character', length = g3.aanxdep.part.inv.n),
+                                           op = vector('character', length = g3.aanxdep.part.inv.n), rhs = vector('character', length = g3.aanxdep.part.inv.n),
+                                           label = vector('character', length = g3.aanxdep.part.inv.n), X2 = g3.aanxdep.part.inv.int$X2)
+
+i <- 1
+for (param in g3.aanxdep.part.inv.int$plabel){
+  row <- filter(parTable(g3.aanxdep.mods$Threshold), plabel == param) %>%
+    select(lhs, op, rhs, label)
+  
+  g3.aanxdep.thr.part.inv.data$lhs[i] <- row$lhs
+  g3.aanxdep.thr.part.inv.data$op[i] <- row$op
+  g3.aanxdep.thr.part.inv.data$rhs[i] <- row$rhs
+  g3.aanxdep.thr.part.inv.data$label[i] <- row$label
+  i <- i + 1
+}
+
+#Consider freeing the equality constraint on the following thresholds to obtain Threshold Partial Invariance on the Grade 3 Caregiver Anxiety and Depression Measure
+print(g3.aanxdep.thr.part.inv.data)
 
 # -----------      Grade 7      -----------
 
@@ -2041,13 +2116,11 @@ print(g7.aanxdep.results)
 
 #Configural vs Threshold
 
-
-
 #We notice a significant change in fit from the configural model to the threshold model 
 #We obtain non-significant changes in fit indices 
 #(difference in CFI of - 0.003, a difference in RMSEA of -0.007, no change observed in the value of SRMR)
 #However, the chi square difference test was statistically significant (chi-square difference= 28.742, p= 0.011)
-#Therefore, we are unable to establish threshold invarience
+#Therefore, we are unable to establish threshold invariance
 
 ##We proceed to investigate partial invariance in the Threshold model
 lavTestScore(g7.aanxdep.mods$Threshold, cumulative = TRUE)$uni
@@ -2089,3 +2162,11 @@ for (param in g7.aanxdep.part.inv.int$plabel){
 
 #Consider freeing the equality constraint on the following thresholds to obtain Threshold Partial Invariance on the Grade 7 Caregiver Anxiety and Depression Measure
 print(g7.aanxdep.thr.part.inv.data)
+
+save(g3.csr.fits, g3.csrl.fits, g3.aint.fits, g3.aemo.fits, g3.arel.fits, 
+     g3.aanxdep.fits, g7.csr.fits, g7.csrl.fits, g7.cyips.fits, g7.cyeps.fits,
+     g7.aemo.fits, g7.arel.fits, g7.aanxdep.fits, g3.arel.thr.part.inv.data,
+     g3.aanxdep.thr.part.inv.data, g7.csr.thr.part.inv.data, g7.csrl.thr.part.inv.data, 
+     g7.cyips.thr.part.inv.data, g7.cyeps.thr.part.inv.data, g7.arel.thr.part.inv.data, 
+     g7.aanxdep.thr.part.inv.data,
+  file= "Archived/MI_Results.RData")
